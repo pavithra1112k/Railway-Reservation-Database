@@ -1,0 +1,327 @@
+CREATE TABLE aadhaar (aadhaar_id NUMBER NOT NULL, pname VARCHAR2(50) NOT NULL, gender VARCHAR2(1) NOT NULL, age NUMBER NOT NULL, email VARCHAR2(20), PRIMARY KEY(aadhaar_id));
+
+insert into aadhaar(aadhaar_id, pname, gender, age, email) values (558967, 'Ravi', 'M', 25, 'ravi@gmail.com');
+insert into aadhaar(aadhaar_id, pname, gender, age, email) values (578966, 'Rajesh', 'M', 19, 'rajesh@gmail.com');
+insert into aadhaar(aadhaar_id, pname, gender, age, email) values (678955, 'Kavya', 'F', 35, 'kv@hotmail.com');
+insert into aadhaar(aadhaar_id, pname, gender, age, email) values (623457, 'Kavya', 'F', 30, 'kavya@gmail.com');
+insert into aadhaar(aadhaar_id, pname, gender, age, email) values (445566, 'Hemanth', 'M', 30, 'hemanth@gmail.com');
+
+SELECT * FROM aadhaar;
+
+CREATE TABLE passengers (p_id NUMBER, email VARCHAR(20) UNIQUE, PRIMARY KEY(p_id));
+
+insert into passengers values(1234,'ravi@gmail.com');
+insert into passengers values(2468,'rajesh@gmail.com');
+insert into passengers values(3579, 'kv@hotmail.com');
+insert into passengers values(9876,'kavya@gmail.com');
+insert into passengers values(5566, 'hemanth@gmail.com');
+
+SELECT * FROM passengers;
+
+CREATE TABLE has1 (p_id NUMBER, aadhaar_id NUMBER, PRIMARY KEY(p_id), FOREIGN KEY(aadhaar_id) references aadhaar(aadhaar_id), FOREIGN KEY(p_id) references passengers(p_id));
+
+insert into has1 (p_id, aadhaar_id) values(1234,558967);
+insert into has1 (p_id, aadhaar_id) values(2468,578966);
+insert into has1 (p_id, aadhaar_id) values(3579,678955);
+insert into has1 (p_id, aadhaar_id) values(9876,623457);
+insert into has1 (p_id, aadhaar_id) values(5566,445566);
+
+SELECT * FROM has1;
+
+CREATE TABLE stations (s_code varchar2(5) PRIMARY KEY, s_name varchar2(50) UNIQUE NOT NULL);
+
+insert into stations(s_code, s_name) values ('HYB','Hyderabad Deccan Jn');
+insert into stations(s_code, s_name) values ('GNT','Guntur Jn');
+insert into stations(s_code, s_name) values ('NLR', 'Nellore Jn');
+insert into stations(s_code, s_name) values ('MAS', 'Chennai Ctrl');
+insert into stations(s_code, s_name) values ('SC','Sec-bad Jn');
+insert into stations(s_code, s_name) values ('KCG','Kacheguda Jn');
+insert into stations(s_code, s_name) values ('ATP', 'Ananthapur Jn');
+insert into stations(s_code, s_name) values ('YPR', 'Yesvantpur Jn');
+insert into stations(s_code, s_name) values ('VSKP', 'Visakhapatnam Jn');
+insert into stations(s_code, s_name) values ('GKP','Gorakpur Jn');
+insert into stations(s_code, s_name) values ('HWN', 'Howrah Jn');
+insert into stations(s_code, s_name) values ('DEC', 'Delhi Cantt');
+insert into stations(s_code, s_name) values ('WL','Warangal');
+
+SELECT * from stations;
+
+CREATE TABLE trains (train_no NUMBER PRIMARY KEY, train_name varchar2(50) NOT NULL, a_stn varchar2(3) NOT NULL, d_stn varchar2(3) NOT NULL, n_coaches NUMBER NOT NULL, seats NUMBER NOT NULL, ttype char(20));
+
+insert into trains (train_no, train_name, a_stn, d_stn, n_coaches, seats, ttype) values (1002, 'Chennai Express', 'HYB', 'MAS', 12, 360, 'Super-fast');
+insert into trains (train_no, train_name, a_stn, d_stn, n_coaches, seats, ttype) values (2001, 'Kacheguda Express', 'YPR', 'KCG', 10, 300, 'Express');
+
+SELECT * from trains;
+
+CREATE TABLE tickets (pnr NUMBER PRIMARY KEY, train_no NUMBER NOT NULL, p_id NUMBER NOT NULL, sno integer, cno VARCHAR2(50),src char(20),dest char(20), rstatus char(10), doj date, FOREIGN KEY(train_no) references trains(train_no) ON DELETE CASCADE, FOREIGN KEY(p_id) references passengers(p_id));
+
+CREATE OR REPLACE PROCEDURE supdate (t_no IN NUMBER)
+IS
+BEGIN
+    UPDATE trains SET seats = seats - 1 WHERE train_no = t_no;
+    DBMS_OUTPUT.PUT_LINE('A ticket is Booked in train no '||t_no|| ' Reduced the number of available seats by 1');
+END;
+CREATE OR REPLACE TRIGGER ticket_update
+    AFTER INSERT ON tickets
+    FOR EACH ROW
+BEGIN
+    supdate(:new.train_no);
+end;
+
+insert into tickets values (34567890,1002,1234,20,'S9','Hyderabad Deccan Jn','Chennai Ctrl','rac','11-oct-20');
+insert into tickets values (23456789,1002,2468,24,'S10','Guntur Jn','Nellore Jn','cnf','10-oct-20');
+insert into tickets values (12345678,2001,3579,12,'A1','Hyderabad Deccan Jn','Ananthapur Jn','cnf','20-oct-20');
+insert into tickets values (45678901,2001,9876,null,'G','Ananthapur Jn','Yesvantpur Jn','cnf','02-oct-20');
+insert into tickets values (56789012,1002,5566,8,'B2','Hyderabad Deccan Jn','Nellore Jn','wl','16-oct-20');
+
+
+select * from tickets;
+
+select seats from trains;
+
+create table books(p_id integer UNIQUE,tkt_type char(10) not null,train_no integer not null,src char(20) not null,dest char(20) not null,doj date,primary key(p_id,doj),foreign key(p_id) references passengers(p_id),foreign key(train_no) references trains(train_no));
+select * from books;
+insert into books values (1234,'Sleeper',1002,'Hyderabad Deccan Jn','Chennai Ctrl','11-oct-20');
+insert into books values (2468,'Sleeper',1002,'Guntur Jn','Nellore Jn','10-oct-20');
+insert into books values (3579,'A_tier',2001,'Hyderabad Deccan Jn','Ananthapur Jn','20-oct-20');
+insert into books values (9876,'General',2001,'Ananthapur Jn','Yesvantpur Jn','02-oct-20');
+insert into books values (5566,'B_tier',1002,'Hyderabad Deccan Jn','Nellore Jn','16-oct-20');
+
+select * from books;
+
+create table A_tier(fare float not null,avail integer,train_no integer primary key,foreign key(train_no) references trains(train_no));
+
+insert into A_tier values('1500',60,1002);
+insert into A_tier values('1000',60,2001);
+
+select * from A_tier;
+
+
+create table B_tier(fare float not null,avail integer,train_no integer primary key,foreign key(train_no) references trains(train_no));
+
+insert into B_tier values('1000',60,2001);
+insert into B_tier values('1500',60,1002);
+
+select * from B_tier;
+
+create table Sleeper(fare float not null,avail integer,train_no integer primary key,foreign key(train_no) references trains(train_no));
+
+insert into Sleeper values('700',60,2001);
+insert into Sleeper values('700',60,1002);
+
+select * from Sleeper;
+
+create table Generals(fare float not null,train_no integer primary key,foreign key(train_no) references trains(train_no));
+
+insert into Generals values('100',2001);
+insert into Generals values('100',1002);
+
+select * from Generals;
+
+
+create table has2(src varchar2(50) NOT NULL,dest varchar2(50) NOT NULL,train_no integer, FOREIGN KEY(train_no) references trains(train_no),FOREIGN KEY(src) references stations(s_name),FOREIGN KEY(dest) references stations(s_name));
+
+insert into has2 values ('Hyderabad Deccan Jn','Guntur Jn',1002);
+
+insert into has2 values ('Hyderabad Deccan Jn','Nellore Jn',1002);
+
+insert into has2 values ('Hyderabad Deccan Jn','Chennai Ctrl',1002);
+
+insert into has2 values ('Hyderabad Deccan Jn','Sec-bad Jn',1002);
+
+insert into has2 values ('Sec-bad Jn','Guntur Jn',1002);
+
+insert into has2 values ('Sec-bad Jn','Nellore Jn',1002);
+
+insert into has2 values ('Sec-bad Jn','Chennai Ctrl',1002);
+
+insert into has2 values ('Guntur Jn','Nellore Jn',1002);
+
+insert into has2 values ('Guntur Jn','Chennai Ctrl',1002);
+
+insert into has2 values ('Nellore Jn','Chennai Ctrl',1002);
+
+insert into has2 values('Kacheguda Jn','Yesvantpur Jn',2001);
+
+insert into has2 values('Kacheguda Jn','Ananthapur Jn',2001);
+
+insert into has2 values('Ananthapur Jn','Yesvantpur Jn',2001);
+select * from has2;
+
+CREATE TABLE cancels (pnr NUMBER PRIMARY KEY,p_id integer, FOREIGN KEY(p_id) references books(p_id));
+
+create or replace trigger cancel_t after insert on cancels
+for each row 
+declare
+pid1 integer;
+pnr1 integer;
+begin
+pid1:= :new.p_id;
+pnr1:= :new.pnr;
+delete from tickets where pnr=pnr1;
+DBMS_OUTPUT.PUT_LINE('Deleted the ticket with pnr number '||pnr1);
+update trains set seats=seats+1 where train_no=(select train_no from books where p_id=pid1) ;
+end; 
+select * from tickets;
+insert into cancels values(23456789,2468);
+select * from cancels;
+
+select * from tickets;
+
+-- create or replace trigger books_t after insert on books
+-- for each row 
+-- declare
+-- pid1 integer;
+-- ttype char(10);
+-- begin
+-- ttype:= :new.tkt_type;
+-- pid1:= :new.p_id;
+-- update trains set seats=seats-1 where train_no=(select train_no from tickets where p_id=pid1);
+-- DBMS_OUTPUT.PUT_LINE('UPDATED');
+
+
+-- end; 
+
+
+
+
+
+-- create or replace trigger books_t after insert on books
+-- for each row 
+-- declare
+-- clas integer;
+-- begin
+-- clas:= :new.tkt_type;
+-- begin
+-- update trains set seats=seats-1;
+-- DBMS_OUTPUT.PUT_LINE();
+-- update trains set seats=seats+1;
+
+-- end;
+
+
+-- CREATE OR REPLACE PROCEDURE sdelete (t_no IN NUMBER)
+-- IS
+-- BEGIN
+--     UPDATE trains SET seats = seats + 1 WHERE train_no = t_no;
+-- END;
+-- CREATE OR REPLACE TRIGGER tickets_update
+--     AFTER DELETE ON tickets
+--     FOR EACH ROW
+-- BEGIN
+--     sdelete(:new.train_no);
+-- end;
+
+-- CREATE OR REPLACE PROCEDURE cdelete (pnr1 IN NUMBER)
+-- IS
+-- BEGIN
+    
+--     DELETE from tickets where pnr=pnr1;
+--     DBMS_OUTPUT.PUT_LINE('UPDATED');
+-- END;
+-- CREATE OR REPLACE TRIGGER cancel_update
+--     AFTER INSERT ON cancels
+--     FOR EACH ROW
+-- BEGIN
+--     cdelete(:new.pnr);
+-- end;
+
+select * from cancels;
+-- names of passengers who cancelled their tickets --
+
+select pname from aadhaar where aadhaar_id in(select aadhaar_id from has1 where p_id in(select p_id from cancels));
+select * from tickets;
+
+-- find the number of passengers travelling in different trains --
+
+select t.train_no,count(*) as res_count
+from tickets t 
+group by train_no;
+
+-- names of passengers who are travelling in Chennai express and whose age is greater than 20 --
+
+select a.pname from aadhaar a where a.age>20 intersect select pname from aadhaar where aadhaar_id in(select aadhaar_id from has1 where p_id in(select p_id from books where train_no=(select train_no from trains where train_name='Chennai Express')));
+
+-- names of passenger whose tickets are not confirmed --
+
+select a.pname from aadhaar a where a.aadhaar_id in(select aadhaar_id from has1 where p_id in(select p_id from tickets where rstatus<>'cnf'));
+
+-- avg age of passenger who travel in chennai Express--
+
+select AVG(s.age) from aadhaar s where s.aadhaar_id in(select aadhaar_id from has1 where p_id in(select p_id from tickets where train_no in(select train_no from trains where train_name='Chennai Express')));
+
+-- A Passenger wants to travel to Chennai.He lives in Guntur.Display the train names in which the passenger can book his ticket --
+
+select train_no,train_name  from trains where train_no in (select train_no from has2 where src='Guntur Jn') intersect select train_no,train_name  from trains where train_no in (select train_no from has2 where dest='Chennai Ctrl');
+
+-- Find the pnr numbers and names of passengers who have booked Tickets --
+
+select a.pname,t.pnr from aadhaar a,has1 h,tickets t where a.aadhaar_id=h.aadhaar_id AND h.p_id=t.p_id;
+
+-- Display the Ticket Information of all passengers who travel in kachiguda Express
+
+select * from tickets where train_no=(select train_no from trains where train_name='Kacheguda Express');
+
+--Display the station names to which there are no trains --
+
+select s.s_name from stations s where s.s_name not in( select r.src from has2 r);
+
+
+select gender,pname,email from aadhaar where aadhaar_id<600000;
+
+-- Display The fare details for different Coaches of all the trains --
+
+select a.train_no,a.fare,b.fare,c.fare,g.fare from A_tier a join B_tier b on (a.train_no=b.train_no) join Sleeper c on (b.train_no=c.train_no) join Generals g on (c.train_no=g.train_no);
+
+-- Find passengers whose age is less than some passenger named Kavya --
+
+SELECT S.pname
+FROM aadhaar S
+WHERE S.age < ANY ( SELECT S2.age
+FROM 
+aadhaar S2 where 
+S2.pname = 'Kavya')
+
+-- Display the passenger details who is the oldest among all the passenegers
+
+SELECT *
+FROM aadhaar S
+WHERE S.age >= ALL( SELECT S2.age
+FROM aadhaar S2 )
+
+Select a.pname,a.gender,h.p_id,t.pnr from aadhaar a join has1 h on(a.aadhaar_id=h.aadhaar_id) join tickets t on (h.p_id=t.p_id) group by gender;
+
+-- Display The number of male of Female passengers travelling in different trains --
+select a.gender,count(*) from aadhaar a group by a.gender;
+
+
+--Create a view to display all the relevant Passenger details --
+
+create view passengerinfo as
+select a.pname,h.p_id,h.aadhaar_id,t.pnr from aadhaar a join has1 h on (a.aadhaar_id=h.aadhaar_id) join tickets t on (t.p_id=h.p_id);
+
+select * from passengerinfo;
+
+-- Create a view to display all the details related to trains and stations which the train connects --
+
+create view trains_stations10 as
+select t.train_no,t.train_name,t.a_stn,t.d_stn,tr.src,tr.dest,s.s_name,s.s_code from trains t join has2 tr on (t.train_no=tr.train_no) join stations s on (tr.src=s.s_name) or (tr.dest=s.s_name);
+
+select * from trains_stations10;
+
+-- display all the passenger details --
+-- access to passenger's Aadhaar Details --
+-- (Don not display Non passenger details) --
+
+select * from aadhaar where aadhaar_id in (select aadhaar_id from has1 where p_id in(select p_id from tickets));
+
+-- show all the possible reservations that a passenger can make in chennai express --
+
+select * from has2 where train_no=(select train_no from trains where train_name='Chennai Express');
+
+-- Display the Nuber of Seats Available for booking in all the trains --
+
+select train_name,train_no,seats from trains;
+
+--Display the second max age of passenger --
+select max(age) from aadhaar where age<>(select max(age) from aadhaar);
