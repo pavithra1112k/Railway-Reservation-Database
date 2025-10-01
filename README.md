@@ -34,4 +34,8 @@ Strong understanding of DBMS concepts: ER modeling, normalization, relationships
 Practical implementation of SQL triggers & views
 Exposure to real-world system design (identity verification, online booking)
 
+🏷️ Tags
+
+DBMS SQL Case Study Triggers Normalization Database Project
+
 Link to Documentation: https://drive.google.com/file/d/15gPQahmqAv2T42-f7mKvECQClJd-fPpg/view?pli=1
