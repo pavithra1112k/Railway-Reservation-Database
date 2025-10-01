@@ -36,6 +36,6 @@ Exposure to real-world system design (identity verification, online booking)
 
 🏷️ Tags
 
-DBMS SQL Case Study Triggers Normalization Database Project
+## DBMS ## SQL ## CaseStudy ##Triggers ##Normalization ##DatabaseProject
 
 Link to Documentation: https://drive.google.com/file/d/15gPQahmqAv2T42-f7mKvECQClJd-fPpg/view?pli=1
