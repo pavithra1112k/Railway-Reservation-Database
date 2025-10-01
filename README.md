@@ -10,37 +10,37 @@ It reduces manual errors in the offline process, ensures identity verification v
 
 ### ✨ Features
 
-Passenger registration with Aadhaar verification
+- Passenger registration with Aadhaar verification
 
-Book and cancel train tickets online
+- Book and cancel train tickets online
 
-Real-time update of available seats through SQL triggers
+- Real-time update of available seats through SQL triggers
 
-Query support to fetch train details, ticket status, passenger information, etc.
+- Query support to fetch train details, ticket status, passenger information, etc.
 
-Handles multiple ticket types: Sleeper, A-Tier, B-Tier, General
+- Handles multiple ticket types: Sleeper, A-Tier, B-Tier, General
 
-Data normalization up to BCNF
+- Data normalization up to BCNF
 
-Sample queries for analytics (e.g., passenger demographics, availability, routes)
+- Sample queries for analytics (e.g., passenger demographics, availability, routes)
 
 
 ### 🛠️ Tech Stack
 
-Database: Oracle SQL / MS SQL
+- Database: Oracle SQL / MS SQL
 
-Tools used: ER Modeling, Normalization, SQL Triggers, Views
+- Tools used: ER Modeling, Normalization, SQL Triggers, Views
 
 
 ### 🚀 Optional Future Enhancements
 
-Add email/notification system for booking and cancellation updates
+- Add email/notification system for booking and cancellation updates
 
-Implement dynamic seat selection instead of random berth allocation
+- Implement dynamic seat selection instead of random berth allocation
 
-Build a full-stack web interface
+- Build a full-stack web interface
 
-Integrate payment gateway simulation
+- Integrate payment gateway simulation
 
 
 ### 🏷️ Topics  
@@ -53,11 +53,11 @@ Integrate payment gateway simulation
 
 ### 📚 Learning Outcomes
 
-Strong understanding of DBMS concepts: ER modeling, normalization, relationships
+- Strong understanding of DBMS concepts: ER modeling, normalization, relationships
 
-Practical implementation of SQL triggers & views
+- Practical implementation of SQL triggers & views
 
-Exposure to real-world system design (identity verification, online booking)
+- Exposure to real-world system design (identity verification, online booking)
 
 
 ### Link to Documentation
