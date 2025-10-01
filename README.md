@@ -32,7 +32,7 @@ Integrate payment gateway simulation
 
 ![DBMS](https://img.shields.io/badge/DBMS-SQL-blue)  
 ![Normalization](https://img.shields.io/badge/Normalization-BCNF-green)  
-![Advanced SQL](https://img.shields.io/badge/Advanced%20SQL-%20Triggers%20%26%20Cursors-orange)
+![Advanced SQL](https://img.shields.io/badge/Advanced%20SQL-%20Triggers%20%26%20Cursors-orange)<br>
 ![Case Study](https://img.shields.io/badge/Project-Case%20Study-yellow)  
 
 📚 Learning Outcomes
