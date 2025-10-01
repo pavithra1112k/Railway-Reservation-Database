@@ -28,6 +28,13 @@ Implement dynamic seat selection instead of random berth allocation
 Build a full-stack web interface
 Integrate payment gateway simulation
 
+🏷️ Topics  
+
+![DBMS](https://img.shields.io/badge/DBMS-SQL-blue)  
+![Normalization](https://img.shields.io/badge/Normalization-BCNF-green)  
+![Triggers](https://img.shields.io/badge/SQL-Triggers-orange)  
+![Case Study](https://img.shields.io/badge/Project-Case%20Study-yellow)  
+
 📚 Learning Outcomes
 
 Strong understanding of DBMS concepts: ER modeling, normalization, relationships
